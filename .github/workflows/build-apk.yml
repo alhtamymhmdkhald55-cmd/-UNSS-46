@@ -31,14 +31,17 @@ jobs:
           set -euo pipefail
 
           ZIP=$(find . -maxdepth 5 -type f \
-            -name "Anis_UNSS_location_quran_fixed.zip" \
+            -iname "Anis_UNSS_location_quran_fixed*.zip" \
             -print -quit)
 
           if [ -z "$ZIP" ]; then
             echo "ERROR: Project ZIP not found."
+            echo "Available ZIP files:"
             find . -type f -iname "*.zip"
             exit 1
           fi
+
+          echo "Found project ZIP: $ZIP"
 
           mkdir -p extracted
           unzip -oq "$ZIP" -d extracted
@@ -47,7 +50,7 @@ jobs:
             -name package.json -print -quit)
 
           if [ -z "$PKG" ]; then
-            echo "ERROR: package.json not found."
+            echo "ERROR: package.json missing inside ZIP"
             exit 1
           fi
 
